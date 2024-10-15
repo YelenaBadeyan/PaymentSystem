@@ -12,5 +12,6 @@ namespace PaymentSystem.Data.DBContext
         }
 
         public DbSet<Users> Users { get; set; }
+        public DbSet<BankCards> BankCards { get; set; }
     }
 }
