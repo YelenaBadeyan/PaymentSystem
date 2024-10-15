@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PaymentSystem.Data.DBContext;
+using PaymentSystem.Data.Entities;
 using PaymentSystem.Data.Models.RequestModels;
 using PaymentSystem.Data.Models.ResponseModels;
 using PaymentSystem.Services;
@@ -33,6 +34,20 @@ namespace PaymentSystem.Controllers
                 SSN = requestModel.SSN
                 
             };
+        }
+
+        [HttpGet("get_all_users")]
+
+        public List<Users> GetAllUsers()
+        {
+            return _usersService.GetAllUsers();
+        }
+
+        [HttpGet("get_user_by_Id/{ID}")]
+
+        public Users GetUserById(int ID)
+        {
+            return _usersService.GetUserByID(ID);
         }
 
 

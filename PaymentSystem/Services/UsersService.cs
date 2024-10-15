@@ -29,6 +29,11 @@ namespace PaymentSystem.Services
             dbContext.Users.Add(newUser);
             dbContext.SaveChanges();
         }
+
+        public List<Users> GetAllUsers() => dbContext.Users.ToList();
+
+        public Users GetUserByID(int ID) => dbContext.Users.FirstOrDefault(n => n.ID ==ID);
+
     }
 
 }
