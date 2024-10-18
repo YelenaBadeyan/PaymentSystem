@@ -50,6 +50,13 @@ namespace PaymentSystem.Controllers
             return _usersService.GetUserByID(ID);
         }
 
+        [HttpPut]
+        public Users UpdateUsers(int ID, UsersRequestModel request)
+        {
+
+            return _usersService.UpdateUser(ID, request);
+        }
+
 
     }
 }
