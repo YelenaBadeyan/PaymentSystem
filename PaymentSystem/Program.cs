@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PaymentSystem.Data.DBContext;
+using PaymentSystem.Middleware;
 using PaymentSystem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseMiddleware<ResponseHeaderMiddleware>();
+app.UseMiddleware<ConditionalMiddleware>();
 
 app.UseHttpsRedirection();
 
