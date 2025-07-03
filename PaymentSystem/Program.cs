@@ -20,6 +20,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.MapUserEndpoints();
+app.MapPaymentEndpoints();
 app.UseHttpsRedirection();
 
 app.Run();
