@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using PaymentSystem.Data;
 using PaymentSystem.Data.Entities;
 using PaymentSystem.DTOs.UserDTOs;
+using PaymentSystem.Queries.UserQueries;
 
 namespace PaymentSystem.Endpoints
 {
@@ -15,69 +18,43 @@ namespace PaymentSystem.Endpoints
             app.MapPut("/api/users/{id}", UpdateUser);
         }
 
-        private static async Task<IResult> GetAllUsers(ApplicationDBContext db)
+        private static async Task<IResult> GetAllUsers(IMediator mediator)
         {
-            var users = await db.Users
-                .Select(u => new GetUserDto
-                {
-                    ID = u.ID,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    Email = u.Email
-                })
-                .ToListAsync();
+            var users = await mediator.Send(new GetAllUsersQuery());
 
             return Results.Ok(users);
         }
 
-        private static async Task<IResult> GetUserById(ApplicationDBContext db, int id)
+        private static async Task<IResult> GetUserById(IMediator mediator, int id)
         {
-            var user = await db.Users
-                .Where(u => u.ID == id)
-                .Select(u => new GetUserDto
-                {
-                    ID = u.ID,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    Email = u.Email
-                })
-                .FirstOrDefaultAsync();
-
-            if (user == null)
-                return Results.NotFound();
+            var user = await mediator.Send(new GetUserByIdQuery{ Id = id });
 
             return Results.Ok(user);
         }
 
-        private static async Task<IResult> CreateUser(ApplicationDBContext db, CreateUserDto input)
+        private static async Task<IResult> CreateUser(IMediator mediator, CreateUserDto input)
         {
-            var user = new User
+            var result = await mediator.Send(new CreateUserQuery()
             {
                 FirstName = input.FirstName,
                 LastName = input.LastName,
                 Email = input.Email
-            };
+            });
 
-            db.Users.Add(user);
-            await db.SaveChangesAsync();
-
-            return Results.Created($"/api/users/{user.ID}", user.ID);
+            return Results.Created(result.LocationUrl, result.UserId);
         }
 
-        private static async Task<IResult> UpdateUser(ApplicationDBContext db, int id, UpdateUserDto input)
+        private static async Task<IResult> UpdateUser(IMediator mediator, int id, UpdateUserDto input)
         {
-            var user = await db.Users.FindAsync(id);
+            var result = await mediator.Send(new UpdateUserQuery()
+            {
+                ID = id,
+                FirstName = input.FirstName,
+                LastName = input.LastName,
+                Email = input.Email
+            });
 
-            if (user is null)
-                return Results.NotFound();
-
-            user.FirstName = input.FirstName;
-            user.LastName = input.LastName;
-            user.Email = input.Email;
-
-            await db.SaveChangesAsync();
-
-            return Results.Ok($"User {id} updated.");
+            return Results.Ok(result);
         }
     }
 
