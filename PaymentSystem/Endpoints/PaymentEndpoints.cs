@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PaymentSystem.Data;
 using PaymentSystem.Data.Entities;
 using PaymentSystem.DTOs.PaymetDTOs;
+using PaymentSystem.Queries.PaymentQuesries;
 
 namespace PaymentSystem.Endpoints
 {
@@ -16,31 +18,17 @@ namespace PaymentSystem.Endpoints
             app.MapPost("api/payment", CreatePayment);
         }
 
-        private static async Task<IResult> GetAllPayments(ApplicationDBContext db)
+        private static async Task<IResult> GetAllPayments(IMediator mediator)
         {
-            var payments = await db.Payments.Select(p => new GetPaymentDto()
-            {
-                ID = p.ID,
-                UserID = p.UserID,
-                Amount = p.Amount,
-                PaymentDate = p.PaymentDate,
-                PaymentMethodName = p.PaymentDetail.Method.Name
-            }).ToListAsync();
+            var result = await mediator.Send(new GetAllPaymentsQuery());
 
-            return Results.Ok(payments);
+            return Results.Ok(result);
 
         }
 
-        private static async Task<IResult> GetPaymentById(ApplicationDBContext db, [FromRoute]int id)
+        private static async Task<IResult> GetPaymentById(IMediator mediator, [FromRoute]int id)
         {
-            var payment = await db.Payments.Where(p => p.ID == id).Select(p => new GetPaymentDto()
-            {
-                ID = p.ID,
-                UserID = p.UserID,
-                Amount = p.Amount,
-                PaymentDate = p.PaymentDate,
-                PaymentMethodName = p.PaymentDetail.Method.Name
-            }).FirstOrDefaultAsync();
+            var payment = await mediator.Send(new GetPaymentByIdQuery(){ Id=id });
 
             if (payment == null)
             {
@@ -50,37 +38,29 @@ namespace PaymentSystem.Endpoints
             return Results.Ok(payment);
         }
 
-        private static async Task<IResult> UpdatePayment(ApplicationDBContext db, [FromRoute]int id, [FromBody]UpdatePaymentDto input)
+        private static async Task<IResult> UpdatePayment(IMediator mediator, [FromRoute]int id, [FromBody]UpdatePaymentDto input)
         {
-            var payment = await db.Payments.FindAsync(id);
+            var result = await mediator.Send(new UpdatePaymentQuery()
+            {
+                Id = id,
+                Amount = input.Amount,
+                PaymentDate = input.PaymentDate
+            });
 
-            if(payment == null)
-                return Results.NotFound();
-
-            payment.Amount = input.Amount;
-            payment.PaymentDate = input.PaymentDate;
-
-            await db.SaveChangesAsync();
-
-            return Results.Ok(payment);
-
+            return Results.Ok(result);
 
         }
 
-        private static async Task<IResult> CreatePayment(ApplicationDBContext db, CreatePaymentDto input)
+        private static async Task<IResult> CreatePayment(IMediator mediator, CreatePaymentDto input)
         {
-            var payment = new Payment()
+            var result = await mediator.Send(new CreatePaymentQuery()
             {
-                Amount = input.Amount,
                 UserID = input.UserID,
+                Amount = input.Amount,
                 PaymentDate = input.PaymentDate
+            });
 
-            };
-
-            await db.Payments.AddAsync(payment);
-            await db.SaveChangesAsync();
-
-            return Results.Ok(payment);
+            return Results.Ok(result);
         }
     }
 }
