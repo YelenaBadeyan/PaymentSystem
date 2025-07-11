@@ -16,11 +16,29 @@ namespace PaymentSystem.Data
         public DbSet<PaymentDetail> PaymentDetails { get; set; }
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
 
+        public DbSet<UserRelation> UserRelations { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Payment>()
                 .Property(p => p.Amount)
                 .HasPrecision(18, 2); // total digits: 18, decimals: 2
+
+            modelBuilder.Entity<UserRelation>(entity =>
+            {
+                entity.HasKey(ur => new { ur.FirstUserId, ur.SecondUserId }); 
+                entity.HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey(ur => ur.FirstUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey(ur => ur.SecondUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property(ur => ur.RelationType)
+                    .IsRequired();
+            });
         }
 
     }
