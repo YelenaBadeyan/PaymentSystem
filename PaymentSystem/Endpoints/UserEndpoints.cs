@@ -34,7 +34,7 @@ namespace PaymentSystem.Endpoints
 
         private static async Task<IResult> CreateUser(IMediator mediator, CreateUserDto input)
         {
-            var result = await mediator.Send(new CreateUserQuery()
+            var result = await mediator.Send(new CreateUserCommand()
             {
                 FirstName = input.FirstName,
                 LastName = input.LastName,
@@ -46,7 +46,7 @@ namespace PaymentSystem.Endpoints
 
         private static async Task<IResult> UpdateUser(IMediator mediator, int id, UpdateUserDto input)
         {
-            var result = await mediator.Send(new UpdateUserQuery()
+            var result = await mediator.Send(new UpdateUserCommand()
             {
                 ID = id,
                 FirstName = input.FirstName,

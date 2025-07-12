@@ -4,7 +4,7 @@ using PaymentSystem.Queries.UserQueries;
 
 namespace PaymentSystem.Handlers.UserHandlers
 {
-    public class UpdateUserHandler : IRequestHandler<UpdateUserQuery, int>
+    public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, int>
     {
         private readonly ApplicationDBContext _db;
 
@@ -13,7 +13,7 @@ namespace PaymentSystem.Handlers.UserHandlers
             _db = db;
         }
 
-        public async Task<int> Handle(UpdateUserQuery request, CancellationToken cancellationToken)
+        public async Task<int> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _db.Users.FindAsync(request.ID);
 

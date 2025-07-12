@@ -5,7 +5,7 @@ using PaymentSystem.Queries.PaymentQuesries;
 
 namespace PaymentSystem.Handlers.PaymentHandlers
 {
-    public class CreatePaymentHandler : IRequestHandler<CreatePaymentQuery, int>
+    public class CreatePaymentHandler : IRequestHandler<CreatePaymentCommand, int>
     {
         private readonly ApplicationDBContext _db;
 
@@ -13,7 +13,7 @@ namespace PaymentSystem.Handlers.PaymentHandlers
         {
             _db = db;
         }
-        public async Task<int> Handle(CreatePaymentQuery request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
         {
             var payment = new Payment()
             {

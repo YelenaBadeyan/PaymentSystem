@@ -2,7 +2,7 @@
 
 namespace PaymentSystem.Queries.UserQueries
 {
-    public class UpdateUserQuery : IRequest<int>
+    public class UpdateUserCommand : IRequest<int>
     {
         public int ID { get; set; }
         public string FirstName { get; set; }

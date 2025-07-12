@@ -4,7 +4,7 @@ using PaymentSystem.Queries.PaymentQuesries;
 
 namespace PaymentSystem.Handlers.PaymentHandlers
 {
-    public class UpdatePaymentHandler : IRequestHandler< UpdatePaymentQuery, int>
+    public class UpdatePaymentHandler : IRequestHandler< UpdatePaymentCommand, int>
     {
         private readonly ApplicationDBContext _db;
 
@@ -12,7 +12,7 @@ namespace PaymentSystem.Handlers.PaymentHandlers
         {
             _db = db;
         }
-        public async Task<int> Handle(UpdatePaymentQuery request, CancellationToken cancellationToken)
+        public async Task<int> Handle(UpdatePaymentCommand request, CancellationToken cancellationToken)
         {
             var payment = await _db.Payments.FindAsync(request.Id);
 

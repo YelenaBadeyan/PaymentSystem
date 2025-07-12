@@ -3,7 +3,7 @@ using PaymentSystem.DTOs.UserDTOs;
 
 namespace PaymentSystem.Queries.UserQueries
 {
-    public class CreateUserQuery : IRequest<CreateUserResponse>
+    public class CreateUserCommand : IRequest<CreateUserResponse>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

@@ -40,7 +40,7 @@ namespace PaymentSystem.Endpoints
 
         private static async Task<IResult> UpdatePayment(IMediator mediator, [FromRoute]int id, [FromBody]UpdatePaymentDto input)
         {
-            var result = await mediator.Send(new UpdatePaymentQuery()
+            var result = await mediator.Send(new UpdatePaymentCommand()
             {
                 Id = id,
                 Amount = input.Amount,
@@ -53,7 +53,7 @@ namespace PaymentSystem.Endpoints
 
         private static async Task<IResult> CreatePayment(IMediator mediator, CreatePaymentDto input)
         {
-            var result = await mediator.Send(new CreatePaymentQuery()
+            var result = await mediator.Send(new CreatePaymentCommand()
             {
                 UserID = input.UserID,
                 Amount = input.Amount,

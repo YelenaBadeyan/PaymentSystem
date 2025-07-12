@@ -2,7 +2,7 @@
 
 namespace PaymentSystem.Queries.PaymentQuesries
 {
-    public class CreatePaymentQuery : IRequest<int>
+    public class CreatePaymentCommand : IRequest<int>
     {
         public int UserID { get; set; }
         public decimal Amount { get; set; }

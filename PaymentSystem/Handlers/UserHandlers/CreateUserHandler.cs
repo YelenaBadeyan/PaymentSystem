@@ -6,7 +6,7 @@ using PaymentSystem.Queries.UserQueries;
 
 namespace PaymentSystem.Handlers.UserHandlers
 {
-    public class CreateUserHandler : IRequestHandler<CreateUserQuery, CreateUserResponse>
+    public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserResponse>
     {
         private readonly ApplicationDBContext _db;
 
@@ -14,7 +14,7 @@ namespace PaymentSystem.Handlers.UserHandlers
         {
             _db = db;
         }
-        public async Task<CreateUserResponse> Handle(CreateUserQuery request, CancellationToken cancellationToken)
+        public async Task<CreateUserResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var user = new User
             {
