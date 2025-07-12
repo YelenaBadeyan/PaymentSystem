@@ -39,6 +39,17 @@ namespace PaymentSystem.Data
                 entity.Property(ur => ur.RelationType)
                     .IsRequired();
             });
+
+            modelBuilder.Entity<User>().HasData(
+                new User{ID = 5, FirstName = "Arman", LastName = "Babayan", Email = "armanbabayan@gmail.com"},
+                new User{ID = 6, FirstName = "Hasmik", LastName = "Martirosyan", Email = "hasmikmartirosyan@gmail.com"}
+                );
+
+
+            modelBuilder.Entity<Payment>().HasData(
+                new Payment{ ID = 7, UserID = 4, Amount = 200, PaymentDate = new DateTime(2025, 7, 11) },
+                new Payment{ ID = 8, UserID = 6, Amount = 6000, PaymentDate = new DateTime(2025, 7, 11) }
+            );
         }
 
     }

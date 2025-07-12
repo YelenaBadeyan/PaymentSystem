@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PaymentSystem.Data;
 
@@ -11,9 +12,11 @@ using PaymentSystem.Data;
 namespace PaymentSystem.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250712205444_seedingDataForUsers")]
+    partial class seedingDataForUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,22 +48,6 @@ namespace PaymentSystem.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("Payments");
-
-                    b.HasData(
-                        new
-                        {
-                            ID = 7,
-                            Amount = 200m,
-                            PaymentDate = new DateTime(2025, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserID = 4
-                        },
-                        new
-                        {
-                            ID = 8,
-                            Amount = 6000m,
-                            PaymentDate = new DateTime(2025, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserID = 6
-                        });
                 });
 
             modelBuilder.Entity("PaymentSystem.Data.Entities.PaymentDetail", b =>
